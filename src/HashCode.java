@@ -2,22 +2,31 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.HashMap;
+							 
+							
 
 
 public class HashCode {
+	
+	int totalTime = 0;
+	int numb_intersections =0;
+	int numb_streets = 0;
+	int numb_cars = 0;
+	int bonus = 0;
+			
+	HashMap<String, Street> streets = new HashMap<String, Street>();
+	Car cars[];
 
 	public static void main(String[] args) {
-		String[] inputs = new String[]{"d"};
+		String[] inputs = new String[]{"a"};
 
         for (String fileName : inputs) {
         	System.out.println("*************" + fileName);
         	HashCode hashCode = new HashCode();
         	hashCode.readInputFile(fileName + ".txt");
         	hashCode.doLogic();
-        	hashCode.saveToOutputFile(fileName);
+        	hashCode.saveToOutputFile(fileName );
         }
 
 	}
@@ -28,22 +37,57 @@ public class HashCode {
          
         BufferedReader bufferedReader = null;
         try {
-        	bufferedReader = new BufferedReader(new FileReader("input/" + inputFileName));
-            int lineNumber = 0;
-            while (bufferedReader.ready()) {
-            	if (lineNumber == 0) {
-                    String line = bufferedReader.readLine();
-                    String[] lineSpiltArray = line.split(" ");
-//                    booksNo = Integer.parseInt(lineSpiltArray[0]);
-//                    libaryNo = Integer.parseInt(lineSpiltArray[1]);
-//                    dayScanning = Integer.parseInt(lineSpiltArray[2]);
-                } else if (lineNumber == 1) {
-                    String line = bufferedReader.readLine();
-                    String[] lineSpiltArray = line.split(" ");
-//                    for (int i = 0; i < lineSpiltArray.length; i++) {
-//						bookList.add(new Book(i,Integer.valueOf(lineSpiltArray[i])));
-//					}
-                } else {
+			bufferedReader = new BufferedReader(new FileReader("input/" + inputFileName));
+			int lineNumber = 0;
+											
+								   
+			//First line
+															  
+																	
+																	 
+																		
+											 
+			String line = bufferedReader.readLine();
+			String[] lineSpiltArray = line.split(" ");
+
+			totalTime = Integer.parseInt(lineSpiltArray[0]);
+			numb_intersections = Integer.parseInt(lineSpiltArray[1]);
+			numb_streets = Integer.parseInt(lineSpiltArray[2]);
+			numb_cars = Integer.parseInt(lineSpiltArray[3]);
+			bonus = Integer.parseInt(lineSpiltArray[4]);
+
+			//read streets
+			for (int i = 0; i < numb_streets; i++) {
+				line = bufferedReader.readLine();
+				lineSpiltArray = line.split(" ");
+				Street street = new Street();
+				street.setStartInt(Integer.parseInt(lineSpiltArray[0]));
+				street.setEndInt(Integer.parseInt(lineSpiltArray[1]));
+				street.setName(lineSpiltArray[2]);
+				street.setDuration(Integer.parseInt(lineSpiltArray[3]));
+				streets.put(lineSpiltArray[2], street);
+			}
+			
+			
+			
+			cars = new Car[numb_cars];
+			//read cars
+			for (int i = 0; i < numb_cars; i++) {
+				line = bufferedReader.readLine();
+				lineSpiltArray = line.split(" ");
+				Car x = new Car(lineSpiltArray.length - 1);
+				for (int j = 1; j < lineSpiltArray.length; j++) {
+					x.addStreet(lineSpiltArray[j]);
+				}
+				x.calculateRating(streets);
+				cars[i] = x;
+			}
+			
+			for (int i = 0; i < cars.length; i++) {
+				System.out.println(cars[i].getRating());
+			}
+			System.out.println(Car.getMaxCarScore());
+			
 //                    for (int j = 0; j < libaryNo; j++) {
 //                        String line = bufferedReader.readLine();
 //                        String[] lineSpiltArray = line.split(" ");
@@ -64,23 +108,23 @@ public class HashCode {
 //              				  return b1.value - b2.value;
 //              			  }
 //              		 });
-                        
+
 //        			}
-                }
-                lineNumber++;
-            }
-        } catch (Exception ex) {
-            System.err.println(ex.getMessage());
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                	bufferedReader.close();
-                } catch (Exception ex) {
-                    System.err.println(ex.getMessage());
-                }
-            }
-        }
-        
+				 
+							 
+			 
+		} catch (Exception ex) {
+			System.err.println(ex.getMessage());
+		} finally {
+			if (bufferedReader != null) {
+				try {
+					bufferedReader.close();
+				} catch (Exception ex) {
+					System.err.println(ex.getMessage());
+				}
+			}
+		}
+
         System.out.println(System.currentTimeMillis()+ " End " + methodName);
 	}
 	
