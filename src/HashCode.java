@@ -88,6 +88,33 @@ public class HashCode {
     	final String methodName = "doLogic";
         System.out.println(System.currentTimeMillis()+ " Start " + methodName);
         
+        // order the cars based on the length of their path (Maybe when the input is read)
+//      Collections.sort(carList, new Comparator<Car>() {
+//			  public int compare(Car l2, Car l1) {
+//				  return l1.getScore()- l2.getScore();
+//			  }
+//		 });
+        
+        //Max_car_score
+        // calculate score for each street
+        // street_score += (Max_car_score - car_score) for a car with the street on their path
+        for (int i = 0; i < carList.size(); i ++) {
+        	Car car = carList[i];
+        	for (int j;  j < car.getPath().size(); i ++) {
+        		street_str = car.getPath()[j];
+        	
+        		//get street object from streetsHash
+        		street.Score += Max_car_score-car.getScore()
+        		
+        	}
+        	
+        	
+        }
+        // Make schedule using the street scores
+        // Streets with less score get more open time.
+        
+        
+        
         
 //       Hashcode 2020   
 //        for (int i = 0; i < libList.size(); i++) {
