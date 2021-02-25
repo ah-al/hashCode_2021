@@ -4,6 +4,9 @@ public class Street {
 	int duration;
 	int startInt;
 	int endInt;
+	int score;
+	int greenTime;
+	int numbCars;
 
 	public String getName() {
 		return name;
@@ -36,5 +39,36 @@ public class Street {
 	public void setEndInt(int endInt) {
 		this.endInt = endInt;
 	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public int getNumbCars() {
+		return numbCars;
+	}
+	
+	public void incNumbCars() {
+		numbCars ++;
+	}
+
+	public void setNumbCars(int numbCars) {
+		this.numbCars = numbCars;
+	}
+
+	public int getGreenTime() {
+		return greenTime;
+	}
+
+	public void setGreenTime(int greenTime) {
+		this.greenTime = greenTime;
+	}
+	
+	
+	
 
 }

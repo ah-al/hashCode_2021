@@ -3,6 +3,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
+import java.util.List;
 							 
 							
 
@@ -16,6 +17,8 @@ public class HashCode {
 	int bonus = 0;
 			
 	HashMap<String, Street> streets = new HashMap<String, Street>();
+
+	Intersection inters[];
 	Car cars[];
 
 	public static void main(String[] args) {
@@ -56,6 +59,12 @@ public class HashCode {
 			numb_cars = Integer.parseInt(lineSpiltArray[3]);
 			bonus = Integer.parseInt(lineSpiltArray[4]);
 
+			inters = new Intersection[numb_intersections];
+			for (int i = 0; i < numb_intersections; i++) {
+				Intersection inter = new Intersection(i);
+				inters[i] = inter;
+				
+			}
 			//read streets
 			for (int i = 0; i < numb_streets; i++) {
 				line = bufferedReader.readLine();
@@ -63,8 +72,12 @@ public class HashCode {
 				Street street = new Street();
 				street.setStartInt(Integer.parseInt(lineSpiltArray[0]));
 				street.setEndInt(Integer.parseInt(lineSpiltArray[1]));
+				inters[Integer.parseInt(lineSpiltArray[1])].addStreet(lineSpiltArray[2]);
 				street.setName(lineSpiltArray[2]);
 				street.setDuration(Integer.parseInt(lineSpiltArray[3]));
+				
+				
+				
 				streets.put(lineSpiltArray[2], street);
 			}
 			
@@ -142,18 +155,38 @@ public class HashCode {
         //Max_car_score
         // calculate score for each street
         // street_score += (Max_car_score - car_score) for a car with the street on their path
-        for (int i = 0; i < carList.size(); i ++) {
-        	Car car = carList[i];
-        	for (int j;  j < car.getPath().size(); i ++) {
-        		street_str = car.getPath()[j];
-        	
+        
+        String street_str;
+        for (int i = 0; i < cars.length; i ++) {
+        	Car car = cars[i];
+        	for (int j = 0;  j < car.getNumb_streets(); j ++) {
+        		street_str = car.getStreets().get(j);
+        		Street s = streets.get(street_str);
+        		s.incNumbCars();
         		//get street object from streetsHash
-        		street.Score += Max_car_score-car.getScore()
+//        		street.Score += Car.getMaxCarScore() - car.getScore();
         		
         	}
         	
         	
         }
+        
+        for (int i = 0; i < inters.length; i++) {
+        	int totalScore = 0;
+			for (int j = 0; j < inters[i].getStreets().size(); j++) {
+				totalScore += streets.get(inters[i].getStreets().get(j)).getNumbCars();
+			}
+			
+			for (int j = 0; j < inters[i].getStreets().size(); j++) {
+				
+				int greenTime = (int) Math.ceil((streets.get(inters[i].getStreets().get(j)).getNumbCars() * 10.0) / totalScore);//TODO calculate total duration.
+				streets.get(inters[i].getStreets().get(j))
+						.setGreenTime(greenTime);
+			}
+			
+			
+		}
+        
         // Make schedule using the street scores
         // Streets with less score get more open time.
         
@@ -239,6 +272,17 @@ public class HashCode {
         try {
         	BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("output/" + filename + ".out"));
         	
+        	bufferedWriter.write(inters.length + "\n");
+        	for (int i = 0; i < inters.length; i++) {
+        		bufferedWriter.write(i + "\n");
+        		bufferedWriter.write(inters[i].getStreets().size() + "\n");
+        		
+        		List<String> tembStreets = inters[i].getStreets();
+        		for (int j = 0; j < tembStreets.size(); j++) {
+        			bufferedWriter.write(tembStreets.get(j) +  " " + streets.get(tembStreets.get(j)).getGreenTime() + "\n");
+				}
+        		
+			}
 //        	bufferedWriter.write(outputList.size() + "\n");
 //        	
 //            for (Library l : outputList) {
@@ -255,7 +299,7 @@ public class HashCode {
 //
 //            }
 //        	
-//            bufferedWriter.flush();
+            bufferedWriter.flush();
         } catch (Exception ex) {
             System.err.println("Err" + ex.getMessage());
         } finally {
