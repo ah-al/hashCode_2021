@@ -16,7 +16,7 @@ public class Street {
 		this.name = name;
 	}
 
-	public int getDuration() {
+	public int getCost() {
 		return duration;
 	}
 
@@ -46,6 +46,10 @@ public class Street {
 
 	public void setScore(int score) {
 		this.score = score;
+	}
+	
+	public void addCost(int duration) {
+		score += duration;
 	}
 
 	public int getNumbCars() {

@@ -22,7 +22,7 @@ public class HashCode {
 	Car cars[];
 
 	public static void main(String[] args) {
-		String[] inputs = new String[]{"a"};
+		String[] inputs = new String[]{"a","b","c","d","e","f"};
 
         for (String fileName : inputs) {
         	System.out.println("*************" + fileName);
@@ -163,6 +163,7 @@ public class HashCode {
         		street_str = car.getStreets().get(j);
         		Street s = streets.get(street_str);
         		s.incNumbCars();
+        		s.addCost(car.getRating());
         		//get street object from streetsHash
 //        		street.Score += Car.getMaxCarScore() - car.getScore();
         		
@@ -173,13 +174,18 @@ public class HashCode {
         
         for (int i = 0; i < inters.length; i++) {
         	int totalScore = 0;
+        	int totalCost = 0;
 			for (int j = 0; j < inters[i].getStreets().size(); j++) {
 				totalScore += streets.get(inters[i].getStreets().get(j)).getNumbCars();
+				totalCost += streets.get(inters[i].getStreets().get(j)).getCost();
 			}
 			
 			for (int j = 0; j < inters[i].getStreets().size(); j++) {
-				
+//				int avrgCost = streets.get(inters[i].getStreets().get(j)).getCost() / streets.get(inters[i].getStreets().get(j)).getNumbCars();
 				int greenTime = (int) Math.ceil((streets.get(inters[i].getStreets().get(j)).getNumbCars() * 10.0) / totalScore);//TODO calculate total duration.
+				if (greenTime == 0) {
+					inters[i].incStToIg();
+				}
 				streets.get(inters[i].getStreets().get(j))
 						.setGreenTime(greenTime);
 			}
@@ -271,16 +277,27 @@ public class HashCode {
         
         try {
         	BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("output/" + filename + ".out"));
-        	
-        	bufferedWriter.write(inters.length + "\n");
-        	for (int i = 0; i < inters.length; i++) {
-        		bufferedWriter.write(i + "\n");
-        		bufferedWriter.write(inters[i].getStreets().size() + "\n");
+        	int countInt = 0;
+for (int i = 0; i < inters.length; i++) {
         		
-        		List<String> tembStreets = inters[i].getStreets();
-        		for (int j = 0; j < tembStreets.size(); j++) {
-        			bufferedWriter.write(tembStreets.get(j) +  " " + streets.get(tembStreets.get(j)).getGreenTime() + "\n");
-				}
+        		if (inters[i].getStreets().size() - inters[i].streetsToIgnore > 0) {
+        			countInt++;
+        		}
+}
+        	bufferedWriter.write(countInt + "\n");
+        	for (int i = 0; i < inters.length; i++) {
+        		
+        		if (inters[i].getStreets().size() - inters[i].streetsToIgnore > 0) {
+            		bufferedWriter.write(i + "\n");
+
+	        		bufferedWriter.write(inters[i].getStreets().size() - inters[i].streetsToIgnore + "\n");
+	        		
+	        		List<String> tembStreets = inters[i].getStreets();
+	        		for (int j = 0; j < tembStreets.size(); j++) {
+	        			if (streets.get(tembStreets.get(j)).getGreenTime() > 0)
+	        			bufferedWriter.write(tembStreets.get(j) +  " " + streets.get(tembStreets.get(j)).getGreenTime() + "\n");
+					}
+        		}
         		
 			}
 //        	bufferedWriter.write(outputList.size() + "\n");

@@ -5,6 +5,7 @@ public class Intersection {
 
 	int ID;
 	int totalScore = 0;
+	int streetsToIgnore = 0;
 	List<String> streets = new ArrayList<String>();
 	
 	public Intersection(int ID) {
@@ -34,6 +35,9 @@ public class Intersection {
 	
 	public void incScore(int score) {
 		totalScore += score;
+	}
+	public void incStToIg() {
+		streetsToIgnore ++;
 	}
 	
 	

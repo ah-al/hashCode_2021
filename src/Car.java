@@ -17,7 +17,7 @@ public class Car {
 	
 	public void calculateRating(HashMap<String, Street> streets2) {
 		for (int i = 0; i < streets.size(); i++) {
-			rating += streets2.get(streets.get(i)).getDuration();
+			rating += streets2.get(streets.get(i)).getCost();
 		}
 		if (maxCarScore < rating) {
 			maxCarScore = rating;
